@@ -1,4 +1,6 @@
-# Math Quest — Addition Adventure #
+# Math Quest -- Addition Adventure #
+
+[![Demo](https://img.shields.io/badge/Website-live-green)](https://takotime808.github.io/math-quest/)
 
 A complete, game-style website to teach kids **addition** with levels, badges, ten-frames, a number line, adaptive difficulty, and accessible controls.
 
@@ -16,7 +18,7 @@ A complete, game-style website to teach kids **addition** with levels, badges, t
 1. Unzip and open `index.html` in a modern browser (Chrome, Edge, Safari, Firefox).
 2. Optional: If your browser blocks speech without user interaction, press any button once before using text-to-speech.
 
-## Notes
+## Notes ##
 - No internet connection required; all assets are local.
 - You can safely host these static files on any static site service (GitHub Pages, Netlify, Firebase Hosting, etc.).
 - Progress is saved locally in the browser under the key `mathQuestV1`.
