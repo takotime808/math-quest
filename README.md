@@ -1,6 +1,8 @@
 # Math Quest -- Addition Adventure #
 
 [![Demo](https://img.shields.io/badge/Website-live-green)](https://takotime808.github.io/math-quest/)
+[![Demo](https://img.shields.io/badge/Next_Website-dev-green)](https://takotime808.github.io/math-quest/math-quest-ultimate/index.html)
+
 
 A complete, game-style website to teach kids **addition** with levels, badges, ten-frames, a number line, adaptive difficulty, and accessible controls.
 
