@@ -1,0 +1,17 @@
+{
+  "name": "Math Quest — Addition Adventure",
+  "short_name": "Math Quest",
+  "description": "A game-style website to teach kids addition with levels, badges, and more.",
+  "start_url": "/math-quest/?source=pwa",
+  "scope": "/math-quest/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b132b",
+  "theme_color": "#3a86ff",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

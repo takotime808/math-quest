@@ -415,21 +415,35 @@
 
   function renderTenFrame(p){
     tenFrame.innerHTML = '';
-    const total = Math.min(p.a + p.b, 10);
-    for(let i=0;i<10;i++){
+    const a = Math.min(p.a, 10);
+    const upTo = Math.min(p.a + p.b, 10); // how far the frame will eventually fill
+
+    for (let i = 0; i < 10; i++) {
       const cell = document.createElement('div');
       cell.className = 'ten-cell';
-      if(i < Math.min(p.a,10)){
-        const dot = document.createElement('div'); dot.className='ten-dot'; cell.appendChild(dot);
-      }else if(i < total){
-        const dot = document.createElement('div'); dot.className='ten-dot'; cell.appendChild(dot);
+
+      if (i < a) {
+        // filled dots for the first addend
+        const dot = document.createElement('div');
+        dot.className = 'ten-dot';
+        cell.appendChild(dot);
+      } else if (i < upTo) {
+        // hollow placeholders for the second addend (no reveal)
+        const ghost = document.createElement('div');
+        ghost.className = 'ten-dot';
+        // inline style to ensure it's visibly hollow even without extra CSS
+        ghost.style.background = 'transparent';
+        ghost.style.border = '2px dashed #cddfff';
+        cell.appendChild(ghost);
       }
+      // cells beyond (a+b) remain empty
       tenFrame.appendChild(cell);
     }
   }
 
   function renderNumberLine(p){
     numberLine.innerHTML = '';
+
     const track = document.createElement('div');
     track.className = 'nl-track';
     numberLine.appendChild(track);
@@ -447,24 +461,23 @@
     end.textContent = String(max);
     numberLine.appendChild(end);
 
-    // show marker at a and a+b
-    const pos = (x) => {
-      // map 0..max -> 6%..94%
-      const t = x / max;
-      return (6 + (94-6)*t) + '%';
-    };
+    const pos = (x) => (6 + (94 - 6) * (x / max)) + '%';
+
+    // start marker at "a"
     const markA = document.createElement('div');
     markA.className = 'nl-marker';
     markA.style.left = pos(p.a);
     markA.textContent = p.a;
     numberLine.appendChild(markA);
 
-    const markSum = document.createElement('div');
-    markSum.className = 'nl-marker';
-    markSum.style.left = pos(p.a + p.b);
-    markSum.textContent = p.a + p.b;
-    numberLine.appendChild(markSum);
+    // final marker is a question mark — no answer reveal
+    const markQ = document.createElement('div');
+    markQ.className = 'nl-marker';
+    markQ.style.left = pos(p.a + p.b);
+    markQ.textContent = '?';
+    numberLine.appendChild(markQ);
   }
+
 
   // Submit answers
   function submitAnswer(value){

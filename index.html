@@ -7,6 +7,12 @@
   <title>Math Quest — Addition Adventure</title>
   <link rel="stylesheet" href="style.css" />
   <meta name="theme-color" content="#2d6cdf">
+  <!-- Start: Make PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#3a86ff">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <!-- End: Make PWA -->
 </head>
 <body>
   <header class="site-header" role="banner">
@@ -215,5 +221,17 @@
   </footer>
 
   <script src="script.js"></script>
+  <!-- Start: Make PWA (note: this could go in script.js) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // For a project site (https://username.github.io/math-quest/)
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .catch(e => console.error('SW registration failed', e));
+      });
+    }
+  </script>
+  <!-- End: Make PWA (note: this could go in script.js) -->
+
 </body>
 </html>
