@@ -1,0 +1,219 @@
+<!-- Copyright (c) 2025 takotime808 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Quest — Addition Adventure</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#2d6cdf">
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="brand">
+      <svg aria-hidden="true" width="36" height="36" viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5ad4ff"/>
+            <stop offset="100%" stop-color="#2d6cdf"/>
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="url(#g)" stroke="white" stroke-width="4"/>
+        <text x="50" y="62" font-size="58" text-anchor="middle" fill="white" font-family="system-ui, ui-sans-serif, Segoe UI, Roboto, Helvetica, Arial">+</text>
+      </svg>
+      <span class="brand-title">Math Quest</span>
+    </div>
+    <nav class="top-nav" aria-label="Primary">
+      <button class="nav-btn" data-target="screen-home" aria-controls="screen-home" aria-label="Home">Home</button>
+      <button class="nav-btn" data-target="screen-map" aria-controls="screen-map" aria-label="Map">Map</button>
+      <button class="nav-btn" data-target="screen-progress" aria-controls="screen-progress" aria-label="Progress">Progress</button>
+      <button class="nav-btn" data-target="screen-settings" aria-controls="screen-settings" aria-label="Settings">Settings</button>
+    </nav>
+  </header>
+
+  <main id="app" role="main">
+    <!-- HOME -->
+    <section id="screen-home" class="screen is-active" role="region" aria-labelledby="home-title">
+      <h1 id="home-title">Addition Adventure</h1>
+      <p class="tagline">Learn + practice addition with fun levels, stars, and friendly helpers.</p>
+
+      <div class="card card-hero">
+        <div class="avatar-select">
+          <label for="playerName" class="label">Player name</label>
+          <input id="playerName" type="text" maxlength="18" placeholder="Type your name" aria-label="Player name" />
+          <div class="avatars" role="radiogroup" aria-label="Choose an avatar">
+            <button class="avatar is-selected" data-avatar="fox" aria-checked="true" role="radio" title="Fox">🦊</button>
+            <button class="avatar" data-avatar="panda" role="radio" aria-checked="false" title="Panda">🐼</button>
+            <button class="avatar" data-avatar="robot" role="radio" aria-checked="false" title="Robot">🤖</button>
+            <button class="avatar" data-avatar="unicorn" role="radio" aria-checked="false" title="Unicorn">🦄</button>
+          </div>
+          <button id="btnStart" class="cta">Start the Adventure</button>
+        </div>
+      </div>
+
+      <div class="helper">
+        <button id="btnHowTo" class="ghost">How do I play?</button>
+      </div>
+    </section>
+
+    <!-- MAP -->
+    <section id="screen-map" class="screen" role="region" aria-labelledby="map-title">
+      <h2 id="map-title">World Map</h2>
+      <p class="tagline">Travel through addition lands. Beat a level to unlock the next!</p>
+      <div class="map-grid" role="list">
+        <button class="level-tile" role="listitem" data-level="1">
+          <span class="level-icon">🌱</span>
+          <span class="level-name">Level 1: Sums to 10</span>
+          <span class="level-desc">No carrying. Learn with a number line and ten frames.</span>
+        </button>
+        <button class="level-tile" role="listitem" data-level="2">
+          <span class="level-icon">🧠</span>
+          <span class="level-name">Level 2: Up to 20</span>
+          <span class="level-desc">Some carrying. Practice strategies.</span>
+        </button>
+        <button class="level-tile" role="listitem" data-level="3">
+          <span class="level-icon">🔍</span>
+          <span class="level-name">Level 3: Missing Addends</span>
+          <span class="level-desc">Find the mystery number!</span>
+        </button>
+        <button class="level-tile" role="listitem" data-level="4">
+          <span class="level-icon">⏱️</span>
+          <span class="level-name">Level 4: Timed Quest</span>
+          <span class="level-desc">Speed + accuracy challenge.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen" role="region" aria-labelledby="game-title">
+      <div class="hud" role="group" aria-label="Game status heads-up display">
+        <div class="hud-left">
+          <span id="hudAvatar" class="hud-avatar" aria-hidden="true">🦊</span>
+          <span id="hudPlayer" class="hud-pill">Player: <strong>Player</strong></span>
+          <span id="hudLevel" class="hud-pill">Level: <strong>1</strong></span>
+        </div>
+        <div class="hud-right">
+          <span id="hudHearts" class="hud-pill" aria-live="polite" aria-atomic="true">❤️❤️❤️</span>
+          <span id="hudScore" class="hud-pill" aria-live="polite" aria-atomic="true">Score: 0</span>
+          <span id="hudStreak" class="hud-pill" aria-live="polite" aria-atomic="true">Streak: 0</span>
+        </div>
+      </div>
+
+      <h2 id="game-title" class="visually-hidden">Game</h2>
+
+      <div class="game-board">
+        <div class="problem" role="group" aria-label="Math problem">
+          <div class="problem-main">
+            <span id="termA" class="term">4</span>
+            <span class="op">+</span>
+            <span id="termB" class="term">3</span>
+            <span class="op">=</span>
+            <span id="termResult" class="term term-target">?</span>
+          </div>
+          <div class="problem-controls">
+            <button id="btnRead" class="ghost small" aria-label="Read the problem aloud">🔊 Read</button>
+            <button id="btnHint" class="ghost small" aria-label="Show a hint">💡 Hint</button>
+          </div>
+        </div>
+
+        <div class="manipulatives">
+          <div class="manip-section" aria-label="Ten Frame">
+            <h3 class="mini-title">Ten Frame</h3>
+            <div id="tenFrame" class="ten-frame" aria-hidden="false"></div>
+          </div>
+          <div class="manip-section" aria-label="Number Line">
+            <h3 class="mini-title">Number Line</h3>
+            <div id="numberLine" class="number-line" aria-hidden="false"></div>
+          </div>
+        </div>
+
+        <div class="answer-area" role="group" aria-label="Answer choices">
+          <div class="answer-mode">
+            <label class="switch">
+              <input type="checkbox" id="toggleInputMode" aria-label="Toggle typing mode" />
+              <span>Type answer</span>
+            </label>
+          </div>
+          <div id="choices" class="choices"></div>
+          <div id="typeArea" class="type-area hidden">
+            <input id="typedAnswer" type="number" inputmode="numeric" aria-label="Type your answer" />
+            <button id="btnSubmit" class="cta small">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></div>
+
+      <div class="game-actions">
+        <button id="btnSkip" class="ghost small">Skip</button>
+        <button id="btnQuit" class="ghost small">Quit</button>
+        <button id="btnNext" class="cta small hidden">Next</button>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section id="screen-progress" class="screen" role="region" aria-labelledby="progress-title">
+      <h2 id="progress-title">Progress</h2>
+      <div class="progress-cards">
+        <div class="card">
+          <h3>Badges</h3>
+          <ul id="badgeList" class="badges"></ul>
+        </div>
+        <div class="card">
+          <h3>Level Stats</h3>
+          <table class="table">
+            <thead><tr><th>Level</th><th>Best Score</th><th>Accuracy</th><th>Fastest</th></tr></thead>
+            <tbody id="statsRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="screen-settings" class="screen" role="region" aria-labelledby="settings-title">
+      <h2 id="settings-title">Settings</h2>
+      <div class="settings-grid">
+        <label class="switch">
+          <input type="checkbox" id="optSound" checked />
+          <span>Sound effects</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="optSpeak" />
+          <span>Read problems aloud</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="optContrast" />
+          <span>High contrast mode</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="optBigButtons" />
+          <span>Big buttons</span>
+        </label>
+        <div class="settings-actions">
+          <button id="btnReset" class="danger">Reset Progress</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- DIALOGS -->
+  <dialog id="dlgHowTo" aria-labelledby="dlgTitleHowTo">
+    <h3 id="dlgTitleHowTo">How to play</h3>
+    <ol class="howto">
+      <li>Pick a level on the map.</li>
+      <li>Solve addition problems by tapping the correct answer or typing it.</li>
+      <li>Use the ten frame and number line to help.</li>
+      <li>Earn stars and badges. Beat the level to unlock the next!</li>
+    </ol>
+    <form method="dialog">
+      <button class="cta">Got it!</button>
+    </form>
+  </dialog>
+
+  <footer class="site-footer" role="contentinfo">
+    <small>© <span id="year"></span> Math Quest — Addition Adventure</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
