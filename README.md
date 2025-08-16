@@ -1,24 +1,27 @@
-# Math Quest -- Addition Adventure #
+<!-- Copyright (c) 2025 takotime808 -->
+# Math Quest — Ultimate
 
-[![Demo](https://img.shields.io/badge/Website-live-green)](https://takotime808.github.io/math-quest/)
+A self-contained, game-style site that teaches **Addition, Subtraction, Multiplication, Division, Fractions & Decimals**, with a **boss mode**, **daily quests**, **coins + shop**, **heatmap mastery dashboard**, **assignments**, **leaderboard**, **import/export**, **multilingual UI (EN/ES)**, **TTS**, **accessibility modes**, and **offline-first PWA**.
 
-A complete, game-style website to teach kids **addition** with levels, badges, ten-frames, a number line, adaptive difficulty, and accessible controls.
+Open `index.html` in any modern browser — no build step, no network required.
 
-## Features ##
-- Four levels: _Sums to 10_, _Up to 20_, _Missing Addends_, _Timed Quest_
-- Multiple-choice or typing mode
-- Ten-frame and number line manipulatives
-- Stars, streaks, badges, and a progress dashboard (saved in `localStorage`)
-- Sound effects (no audio files; uses WebAudio beeps)
-- Optional text-to-speech for problems (if the browser supports it)
-- High contrast and Big buttons modes for accessibility
-- Mobile-friendly, responsive layout (no external libraries)
+## Highlights
+- **Worlds:** +, −, ×, ÷, Fractions/Decimals with 4 levels each, plus **boss battles**.
+- **Learning aids:** Ten-frame & number line for operations; rule-based **Tutor Mode** explains strategies step-by-step.
+- **Adaptive loop:** Streaks, coins, badges; daily quests with streak tracking.
+- **Teacher tools:** Multi-profile support, PIN-locked Admin, mastery heatmap, CSV export, parent-email summary, simple assignments.
+- **Device-friendly:** Local-only storage (`localStorage`), import/export profile JSON, PWA service worker for offline use.
 
-## Getting started ##
-1. Unzip and open `index.html` in a modern browser (Chrome, Edge, Safari, Firefox).
-2. Optional: If your browser blocks speech without user interaction, press any button once before using text-to-speech.
+## Install (optional)
+Click **Settings → Install App** (or use your browser’s “Add to Home Screen”).
 
-## Notes ##
-- No internet connection required; all assets are local.
-- You can safely host these static files on any static site service (GitHub Pages, Netlify, Firebase Hosting, etc.).
-- Progress is saved locally in the browser under the key `mathQuestV1`.
+## Data
+- Stored at `localStorage["mqUltimateV1"]`.
+- Profile export files end with `.mqprofile.json`.
+
+## Notes
+- Charts are simple inline SVG (no dependencies).
+- Email feature opens a pre-filled `mailto:`. It does not send mail for you.
+- “AI Tutor” is rule-based and works offline by explaining standard strategies.
+
+Enjoy!
