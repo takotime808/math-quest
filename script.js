@@ -122,6 +122,14 @@
   const btnQuit = $('#btnQuit');
   const btnNext = $('#btnNext');
 
+  // Allow Enter key to submit typed answers
+  typedAnswer.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const v = typedAnswer.value.trim();
+      if (v !== '') submitAnswer(Number(v));
+    }
+  });
+
   // Progress
   const badgeList = $('#badgeList');
   const statsRows = $('#statsRows');
@@ -357,6 +365,11 @@
     }
   }
 
+  // Compute expected answer from operands (robust for 0-cases)
+  function expectedAnswer(p){
+    return (p.promptType === 'sum') ? (p.a + p.b) : (p.missing === 'a' ? p.a : p.b);
+  }
+
   // Render helpers
   function renderProblem(p){
     // Default to sum layout: a + b = ?
@@ -370,6 +383,9 @@
       typeArea.classList.remove('hidden');
       typedAnswer.value = '';
       typedAnswer.focus();
+
+      // important: disable MC key shortcuts in typing mode
+      document.onkeydown = null;
     }else{
       typeArea.classList.add('hidden');
       choicesEl.innerHTML = '';
@@ -413,6 +429,7 @@
     btnRead.onclick = () => speak(readText);
   }
 
+  // Ten-frame: show addend A as filled, addend B as hollow placeholders (no reveal)
   function renderTenFrame(p){
     tenFrame.innerHTML = '';
     const a = Math.min(p.a, 10);
@@ -431,7 +448,6 @@
         // hollow placeholders for the second addend (no reveal)
         const ghost = document.createElement('div');
         ghost.className = 'ten-dot';
-        // inline style to ensure it's visibly hollow even without extra CSS
         ghost.style.background = 'transparent';
         ghost.style.border = '2px dashed #cddfff';
         cell.appendChild(ghost);
@@ -441,6 +457,7 @@
     }
   }
 
+  // Number line: show start at a; put '?' at a+b (no reveal)
   function renderNumberLine(p){
     numberLine.innerHTML = '';
 
@@ -478,11 +495,13 @@
     numberLine.appendChild(markQ);
   }
 
-
-  // Submit answers
+  // Submit answers (compute expected answer from operands to avoid edge-case bugs)
   function submitAnswer(value){
     const p = session.currentProblem;
-    const correct = Number(value) === Number(p.correct);
+    const want = Number(expectedAnswer(p));
+    const got  = Number(value);
+    const correct = Number.isFinite(want) && Number.isFinite(got) && got === want;
+
     session.attempts++;
     session.accuracyWindow.push(correct ? 1 : 0);
     if(session.accuracyWindow.length > 12) session.accuracyWindow.shift();
@@ -495,15 +514,19 @@
       feedback.className = 'feedback good';
       feedback.textContent = choice(['Great!', 'Nice!', 'You got it!', 'Awesome!']);
       btnNext.classList.remove('hidden');
+
       // award micro badges
       if(session.streak === 5) addBadge('🔥 Streak x5');
       if(session.correctCount === 5) addBadge('⭐ 5 Correct');
+
       // check level completion
       const target = levelConfigs[session.level].targetCorrect;
       if(session.correctCount >= target){
         endLevel(true);
         return;
       }
+
+      btnNext.focus();
     }else{
       beep('bad');
       session.streak = 0;
@@ -519,13 +542,6 @@
 
     // adaptive difficulty: widen or narrow ranges based on recent accuracy
     adaptDifficulty();
-
-    // Next problem button appears after correct; otherwise allow retry/new
-    if(correct){
-      btnNext.focus();
-    }else{
-      // for multiple choice, highlight wrong selection briefly handled by feedback only
-    }
   }
 
   // Adaptive difficulty by adjusting the operand ranges in the level config
@@ -561,6 +577,7 @@
     if(v === '') return;
     submitAnswer(Number(v));
   });
+
   toggleInputMode.addEventListener('change', () => {
     renderProblem(session.currentProblem);
   });
@@ -568,14 +585,17 @@
   // end level
   function endLevel(win){
     if(session.timer) { clearInterval(session.timer); session.timer = null; }
+
     const cfg = levelConfigs[session.level];
     const elapsed = Math.floor((Date.now() - session.startTime)/1000);
     const accuracy = session.attempts ? (session.correctCount / session.attempts) : 0;
+
     // Update progress stats
     const st = state.progress.stats[session.level];
     st.bestScore = Math.max(st.bestScore, session.score);
     st.bestAccuracy = Math.max(st.bestAccuracy, accuracy);
     st.bestTime = st.bestTime == null ? elapsed : Math.min(st.bestTime, elapsed);
+
     // unlock next level if win
     if(win && state.progress.unlocked < 4){
       state.progress.unlocked = Math.max(state.progress.unlocked, session.level + 1);
@@ -583,10 +603,26 @@
     }
     saveState();
 
-    const msg = win ? `Level cleared! Score ${session.score}.` : `Level over. Try again! Score ${session.score}.`;
-    alert(msg);
+    // Clearer dialog + correct answer for the last problem on loss
+    let header = win ? 'Level cleared!' : 'Level over. Try again!';
+    let details = `Final score: ${session.score}.`;
+
+    if(!win && session?.currentProblem){
+      const p = session.currentProblem;
+      const want = expectedAnswer(p); // uses the helper that computes from operands
+      const sum = p.a + p.b;
+
+      const lastLine = (p.promptType === 'sum')
+        ? `Last problem: ${p.a} + ${p.b} = ${sum}.`
+        : `Last problem: ${p.missing==='a'?'?':p.a} + ${p.missing==='b'?'?':p.b} = ${sum}. Correct blank: ${want}.`;
+
+      details += `\n${lastLine}`;
+    }
+
+    alert(`${header}\n${details}`);
     showScreen('screen-map');
   }
+
 
   function addBadge(name){
     if(!state.progress.badges.includes(name)){
