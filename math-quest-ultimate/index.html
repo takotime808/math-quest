@@ -1,0 +1,256 @@
+<!-- Copyright (c) 2025 takotime808 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Quest — Ultimate</title>
+  <meta name="theme-color" content="#2d6cdf">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="brand">
+      <svg aria-hidden="true" width="36" height="36" viewBox="0 0 100 100" class="logo">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5ad4ff"/>
+            <stop offset="100%" stop-color="#2d6cdf"/>
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="url(#g)" stroke="white" stroke-width="4"/>
+        <text x="50" y="62" font-size="58" text-anchor="middle" fill="white" font-family="system-ui, ui-sans-serif, Segoe UI, Roboto, Helvetica, Arial">✦</text>
+      </svg>
+      <span class="brand-title">Math Quest</span>
+    </div>
+    <nav class="top-nav" aria-label="Primary">
+      <button class="nav-btn" data-target="screen-home">🏠 <span data-i18n="nav.home">Home</span></button>
+      <button class="nav-btn" data-target="screen-map">🗺️ <span data-i18n="nav.map">Map</span></button>
+      <button class="nav-btn" data-target="screen-store">🛍️ <span data-i18n="nav.store">Store</span></button>
+      <button class="nav-btn" data-target="screen-quests">📜 <span data-i18n="nav.quests">Quests</span></button>
+      <button class="nav-btn" data-target="screen-dashboard">📊 <span data-i18n="nav.dashboard">Dashboard</span></button>
+      <button class="nav-btn" data-target="screen-settings">⚙️ <span data-i18n="nav.settings">Settings</span></button>
+      <button class="nav-btn" data-target="screen-admin">🔒 <span data-i18n="nav.admin">Admin</span></button>
+    </nav>
+  </header>
+
+  <main id="app" role="main">
+    <!-- HOME -->
+    <section id="screen-home" class="screen is-active" role="region">
+      <div class="split">
+        <div class="card">
+          <h1 data-i18n="home.title">Welcome, hero!</h1>
+          <p class="tagline" data-i18n="home.tagline">Choose your player and begin the adventure.</p>
+
+          <div class="profiles">
+            <div class="profiles-list" id="profilesList" role="list"></div>
+            <div class="profiles-actions">
+              <button id="btnNewProfile" class="cta">➕ <span data-i18n="home.newProfile">New Player</span></button>
+              <button id="btnExportProfile" class="ghost">⬇️ <span data-i18n="home.export">Export</span></button>
+              <label class="upload ghost">⬆️ <span data-i18n="home.import">Import</span>
+                <input id="fileImport" type="file" accept="application/json">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 data-i18n="home.customize">Customize</h2>
+          <div class="avatar-select">
+            <div class="avatars" id="avatarChooser" role="radiogroup"></div>
+            <label for="playerName" class="label" data-i18n="home.name">Player name</label>
+            <input id="playerName" type="text" maxlength="18" placeholder="Type your name" />
+            <div class="lang-row">
+              <label class="label" for="langSelect" data-i18n="home.language">Language</label>
+              <select id="langSelect" aria-label="Language">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+              </select>
+            </div>
+            <button id="btnStart" class="cta">🎮 <span data-i18n="home.start">Start</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAP (Worlds + Levels + Boss) -->
+    <section id="screen-map" class="screen" role="region">
+      <h2>🗺️ <span data-i18n="map.title">World Map</span></h2>
+      <p class="tagline" data-i18n="map.tagline">Choose a world and level. Clear levels to face the boss!</p>
+
+      <div class="worlds" role="tablist" id="worldTabs"></div>
+      <div class="svg-map-wrap">
+        <svg id="worldMap" viewBox="0 0 1200 480" class="svg-map" aria-label="Progression map">
+          <!-- Simple islands -->
+          <g class="island" data-op="add"><circle cx="120" cy="240" r="90" /><text x="120" y="246">+</text></g>
+          <g class="island" data-op="sub"><circle cx="320" cy="110" r="80" /><text x="320" y="116">−</text></g>
+          <g class="island" data-op="mul"><circle cx="560" cy="200" r="95" /><text x="560" y="206">×</text></g>
+          <g class="island" data-op="div"><circle cx="800" cy="120" r="85" /><text x="800" y="126">÷</text></g>
+          <g class="island" data-op="frac"><circle cx="1020" cy="240" r="100" /><text x="1020" y="246">⅟</text></g>
+        </svg>
+      </div>
+
+      <div class="map-grid" role="list" id="levelGrid"></div>
+      <div class="boss-area">
+        <button id="btnBoss" class="cta">👾 <span data-i18n="map.boss">Boss Battle</span></button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen" role="region">
+      <div class="hud">
+        <div class="hud-left">
+          <span id="hudAvatar" class="hud-avatar" aria-hidden="true">🦊</span>
+          <span id="hudPlayer" class="hud-pill">Player: <strong>Player</strong></span>
+          <span id="hudOp" class="hud-pill">Op: <strong>+</strong></span>
+          <span id="hudLevel" class="hud-pill">Level: <strong>1</strong></span>
+        </div>
+        <div class="hud-right">
+          <span id="hudHearts" class="hud-pill">❤️❤️❤️</span>
+          <span id="hudCoins" class="hud-pill">🪙 0</span>
+          <span id="hudStreak" class="hud-pill">Streak: 0</span>
+          <span id="hudTime" class="hud-pill"></span>
+        </div>
+      </div>
+
+      <div class="problem card">
+        <div class="problem-main">
+          <span id="termA" class="term">4</span>
+          <span id="termOp" class="op">+</span>
+          <span id="termB" class="term">3</span>
+          <span class="op">=</span>
+          <span id="termResult" class="term term-target">?</span>
+        </div>
+        <div class="problem-controls">
+          <button id="btnRead" class="ghost small">🔊 <span data-i18n="game.read">Read</span></button>
+          <button id="btnHint" class="ghost small">💡 <span data-i18n="game.hint">Hint</span></button>
+          <label class="switch">
+            <input type="checkbox" id="toggleInputMode" />
+            <span data-i18n="game.type">Type answer</span>
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="toggleTutor" />
+            <span data-i18n="game.tutor">Tutor mode</span>
+          </label>
+        </div>
+
+        <div class="manipulatives">
+          <div>
+            <h3 class="mini-title" data-i18n="game.tenframe">Ten Frame</h3>
+            <div id="tenFrame" class="ten-frame"></div>
+          </div>
+          <div>
+            <h3 class="mini-title" data-i18n="game.numline">Number Line</h3>
+            <div id="numberLine" class="number-line"></div>
+          </div>
+        </div>
+
+        <div class="answer-area">
+          <div id="choices" class="choices"></div>
+          <div id="typeArea" class="type-area hidden">
+            <input id="typedAnswer" type="text" inputmode="numeric" />
+            <button id="btnSubmit" class="cta small" data-i18n="game.submit">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      <div class="game-actions">
+        <button id="btnSkip" class="ghost small" data-i18n="game.skip">Skip</button>
+        <button id="btnQuit" class="ghost small" data-i18n="game.quit">Quit</button>
+        <button id="btnNext" class="cta small hidden" data-i18n="game.next">Next</button>
+      </div>
+    </section>
+
+    <!-- STORE -->
+    <section id="screen-store" class="screen" role="region">
+      <h2>🪙 <span data-i18n="store.title">Coin Shop</span></h2>
+      <p class="tagline" data-i18n="store.tagline">Earn coins by playing. Buy avatars, themes, and pets!</p>
+      <div id="storeItems" class="store-grid"></div>
+    </section>
+
+    <!-- QUESTS -->
+    <section id="screen-quests" class="screen" role="region">
+      <h2>📜 <span data-i18n="quests.title">Daily Quests</span></h2>
+      <div id="questList" class="quests"></div>
+      <div class="quest-streak"><span data-i18n="quests.streak">Streak</span>: <strong id="questStreak">0</strong> 🔥</div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="screen-dashboard" class="screen" role="region">
+      <h2>📊 <span data-i18n="dash.title">Dashboard</span></h2>
+      <div class="split">
+        <div class="card">
+          <div class="world-toggle" role="tablist" id="dashTabs"></div>
+          <div id="heatmapWrap" class="heatmap-wrap"></div>
+        </div>
+        <div class="card">
+          <h3 data-i18n="dash.report">Report</h3>
+          <div id="reportCharts" class="charts"></div>
+          <div class="report-actions">
+            <button id="btnExportCSV" class="ghost small">⬇️ CSV</button>
+            <button id="btnCopyEmail" class="ghost small" data-i18n="dash.email">Parent Email</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 data-i18n="dash.leaderboard">Leaderboard (this device)</h3>
+        <div id="leaderboard" class="leaderboard"></div>
+      </div>
+      <div class="card">
+        <h3 data-i18n="dash.assignments">Assignments</h3>
+        <div id="assignmentList" class="assignments"></div>
+        <button id="btnNewAssignment" class="cta small" data-i18n="dash.newAssign">New Assignment</button>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="screen-settings" class="screen" role="region">
+      <h2>⚙️ <span data-i18n="settings.title">Settings</span></h2>
+      <div class="settings-grid">
+        <label class="switch"><input type="checkbox" id="optSound" checked /><span data-i18n="settings.sound">Sound effects</span></label>
+        <label class="switch"><input type="checkbox" id="optSpeak" /><span data-i18n="settings.speak">Read problems aloud</span></label>
+        <label class="switch"><input type="checkbox" id="optContrast" /><span data-i18n="settings.contrast">High contrast</span></label>
+        <label class="switch"><input type="checkbox" id="optBigButtons" /><span data-i18n="settings.big">Big buttons</span></label>
+        <label class="switch"><input type="checkbox" id="optTutor" /><span data-i18n="settings.tutor">Tutor mode default</span></label>
+        <div class="settings-actions">
+          <button id="btnReset" class="danger" data-i18n="settings.reset">Reset Profile</button>
+          <button id="btnInstall" class="ghost" data-i18n="settings.install">Install App</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN (PIN) -->
+    <section id="screen-admin" class="screen" role="region">
+      <h2>🔒 <span data-i18n="admin.title">Teacher / Parent</span></h2>
+      <div id="adminLocked" class="card">
+        <p data-i18n="admin.locked">Enter PIN to unlock adult tools.</p>
+        <input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" />
+        <button id="btnUnlock" class="cta small" data-i18n="admin.unlock">Unlock</button>
+      </div>
+      <div id="adminUnlocked" class="hidden">
+        <div class="split">
+          <div class="card">
+            <h3 data-i18n="admin.manage">Manage Profiles</h3>
+            <div id="adminProfiles"></div>
+          </div>
+          <div class="card">
+            <h3 data-i18n="admin.pintitle">PIN</h3>
+            <input id="pinNew" type="password" inputmode="numeric" maxlength="6" placeholder="New PIN" />
+            <button id="btnSetPin" class="ghost small" data-i18n="admin.setpin">Set PIN</button>
+            <p class="small" data-i18n="admin.pinnote">Note: PIN stored only on this device.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="coins"><span id="footCoins">🪙 0</span></div>
+    <small>© <span id="year"></span> Math Quest — Ultimate</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
