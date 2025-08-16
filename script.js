@@ -86,6 +86,7 @@
 
   // nav
   $$('.nav-btn').forEach(b => b.addEventListener('click', () => showScreen(b.dataset.target)));
+  let advancing = false; // prevents double submissions while we auto-advance
 
   // Home
   const nameInput = $('#playerName');
@@ -497,6 +498,8 @@
 
   // Submit answers (compute expected answer from operands to avoid edge-case bugs)
   function submitAnswer(value){
+    if (advancing) return; // ignore extra clicks/keys during transition
+
     const p = session.currentProblem;
     const want = Number(expectedAnswer(p));
     const got  = Number(value);
@@ -513,21 +516,37 @@
       session.correctCount += 1;
       feedback.className = 'feedback good';
       feedback.textContent = choice(['Great!', 'Nice!', 'You got it!', 'Awesome!']);
-      btnNext.classList.remove('hidden');
 
-      // award micro badges
+      // badges
       if(session.streak === 5) addBadge('🔥 Streak x5');
       if(session.correctCount === 5) addBadge('⭐ 5 Correct');
 
-      // check level completion
+      // level completion?
       const target = levelConfigs[session.level].targetCorrect;
       if(session.correctCount >= target){
         endLevel(true);
         return;
       }
 
-      btnNext.focus();
-    }else{
+      // ---- Auto-advance after a short pause ----
+      advancing = true;
+
+      // temporarily disable inputs
+      $$('.choice').forEach(b => b.disabled = true);
+      btnSubmit.disabled = true;
+      typedAnswer.disabled = true;
+
+      setTimeout(() => {
+        // reset input disabled state for the next problem
+        $$('.choice').forEach(b => b.disabled = false);
+        btnSubmit.disabled = false;
+        typedAnswer.disabled = false;
+
+        btnNext.classList.add('hidden'); // keep Next hidden; we auto-advance
+        nextProblem();
+        advancing = false;
+      }, 700); // feel free to tweak (500–900ms works nicely)
+    } else {
       beep('bad');
       session.streak = 0;
       session.hearts -= 1;
@@ -540,9 +559,10 @@
       }
     }
 
-    // adaptive difficulty: widen or narrow ranges based on recent accuracy
+    // adaptive difficulty
     adaptDifficulty();
   }
+
 
   // Adaptive difficulty by adjusting the operand ranges in the level config
   function adaptDifficulty(){
