@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero">
+  <h2>Raise adorable virtual pets. Earn Petcoins. Build cozy vibes.</h2>
+  {% if not current_user.is_authenticated %}
+    <p><a class="btn" href="{{ url_for('main.register') }}">Get Started</a></p>
+  {% else %}
+    <p><a class="btn" href="{{ url_for('main.dashboard') }}">Go to Dashboard</a></p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,9 @@
+class Config:
+    SECRET_KEY = "dev-secret-change-me"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///petlands.db"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MAX_PETS_PER_USER = 4
+    DAILY_REWARD_MIN = 10
+    DAILY_REWARD_MAX = 100
+    MINIGAME_REWARD = 5
+    MINIGAME_DAILY_LIMIT = 20

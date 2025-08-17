@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Create your account</h2>
+<form method="post" class="card">
+  <label>Username <input required name="username"></label>
+  <label>Email <input type="email" required name="email"></label>
+  <label>Password <input type="password" required name="password"></label>
+  <button class="btn" type="submit">Register</button>
+</form>
+{% endblock %}

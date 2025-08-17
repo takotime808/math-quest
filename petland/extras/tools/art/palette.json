@@ -1,0 +1,10 @@
+{
+  "default": {
+    "primary": "#4f46e5",
+    "accent": "#f59e0b",
+    "mint": "#aaf0d1",
+    "sky": "#a3d3ff",
+    "peach": "#ffd1b3",
+    "lavender": "#d7b9ff"
+  }
+}

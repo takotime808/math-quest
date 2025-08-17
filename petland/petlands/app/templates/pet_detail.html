@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>{{ pet.name }} the {{ pet.species }}</h2>
+<div class="card">
+  <div class="pet-avatar xl" style="--pet-color: {{ pet.color }}"></div>
+  <div class="stats xl">❤️ {{ pet.health }} | 🙂 {{ pet.happiness }} | 🍖 {{ pet.hunger }}</div>
+  <form method="post">
+    <button name="action" value="play" class="btn">Play (+10🙂 -5🍖)</button>
+  </form>
+</div>
+<div class="card">
+  <h3>Feed / Use Item</h3>
+  {% set inv = user.inventory_items %}
+  {% if inv %}
+    <form method="post">
+      <select name="inv_id">
+        {% for i in inv if i.quantity > 0 %}
+          <option value="{{ i.id }}">{{ i.item.name }} (x{{ i.quantity }})</option>
+        {% endfor %}
+      </select>
+      <button name="action" value="feed" class="btn">Use</button>
+    </form>
+  {% else %}
+    <p>No items. Visit the <a href="{{ url_for('main.shop') }}">Shop</a>.</p>
+  {% endif %}
+</div>
+<p><a href="{{ url_for('main.dashboard') }}">← Back to dashboard</a></p>
+{% endblock %}

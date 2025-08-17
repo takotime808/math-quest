@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Hi, {{ user.username }}!</h2>
+<div class="balance">Petcoins: <strong>{{ user.balance }}</strong></div>
+<div class="grid">
+  <div class="card">
+    <h3>Your Pets</h3>
+    {% if pets %}
+      <ul class="pets">
+        {% for p in pets %}
+        <li>
+          <a href="{{ url_for('main.pet_detail', pid=p.id) }}">
+            <div class="pet-avatar" style="--pet-color: {{ p.color }}"></div>
+            <div class="pet-name">{{ p.name }}</div>
+            <div class="stats">❤️ {{ p.health }} | 🙂 {{ p.happiness }} | 🍖 {{ p.hunger }}</div>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You have no pets yet.</p>
+    {% endif %}
+    {% if pets|length < config.MAX_PETS_PER_USER %}
+      <p><a class="btn" href="{{ url_for('main.adopt') }}">Adopt a pet</a></p>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>Daily & Mini-game</h3>
+    <form action="{{ url_for('main.daily_spin') }}" method="post">
+      <button class="btn" type="submit">Claim Daily Reward</button>
+    </form>
+    <p><a class="btn" href="{{ url_for('main.minigame_addition') }}">Play Addition Mini-game</a></p>
+  </div>
+</div>
+{% endblock %}

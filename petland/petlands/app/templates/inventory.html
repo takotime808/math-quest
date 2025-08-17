@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Your Inventory</h2>
+<table class="card table">
+  <tr><th>Item</th><th>Qty</th><th>Use</th></tr>
+  {% for i in inv %}
+  <tr>
+    <td>{{ i.item.name }}</td>
+    <td>{{ i.quantity }}</td>
+    <td><a class="btn" href="{{ url_for('main.dashboard') }}">Use on a pet</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

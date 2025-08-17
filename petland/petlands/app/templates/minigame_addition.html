@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Addition Mini-game</h2>
+<p>Answer correctly to earn Petcoins. Limit resets daily.</p>
+<form method="post" class="card">
+  <input type="hidden" name="a" value="{{ a }}">
+  <input type="hidden" name="b" value="{{ b }}">
+  <div class="question">{{ a }} + {{ b }} = ?</div>
+  <input name="answer" placeholder="Your answer">
+  <button class="btn" type="submit">Submit</button>
+</form>
+<p>New problem appears after each submit.</p>
+{% endblock %}

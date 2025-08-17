@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Adopt a new pet</h2>
+<form method="post" class="card">
+  <label>Name <input name="name" maxlength="32" required></label>
+  <label>Species
+    <select name="species">
+      <option>Fuzzle</option>
+      <option>Whim</option>
+      <option>Glim</option>
+      <option>Sprig</option>
+    </select>
+  </label>
+  <label>Color
+    <select name="color">
+      <option value="mint">Mint</option>
+      <option value="sky">Sky</option>
+      <option value="peach">Peach</option>
+      <option value="lavender">Lavender</option>
+    </select>
+  </label>
+  <button class="btn" type="submit">Adopt</button>
+</form>
+{% endblock %}
