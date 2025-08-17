@@ -5,13 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Quest — Addition Adventure</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <meta name="theme-color" content="#2d6cdf">
   <!-- Start: Make PWA -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#3a86ff">
-  <link rel="icon" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
   <!-- End: Make PWA -->
 </head>
 <body>
@@ -33,6 +33,7 @@
       <button class="nav-btn" data-target="screen-home" aria-controls="screen-home" aria-label="Home">Home</button>
       <button class="nav-btn" data-target="screen-map" aria-controls="screen-map" aria-label="Map">Map</button>
       <button class="nav-btn" data-target="screen-progress" aria-controls="screen-progress" aria-label="Progress">Progress</button>
+      <button class="nav-btn" data-target="screen-shop" aria-controls="screen-shop" aria-label="Shop">Shop</button>
       <button class="nav-btn" data-target="screen-settings" aria-controls="screen-settings" aria-label="Settings">Settings</button>
     </nav>
   </header>
@@ -99,6 +100,7 @@
           <span id="hudLevel" class="hud-pill">Level: <strong>1</strong></span>
         </div>
         <div class="hud-right">
+          <span id="hudCoins" class="hud-pill" aria-live="polite" aria-atomic="true">🪙 0</span>
           <span id="hudHearts" class="hud-pill" aria-live="polite" aria-atomic="true">❤️❤️❤️</span>
           <span id="hudScore" class="hud-pill" aria-live="polite" aria-atomic="true">Score: 0</span>
           <span id="hudStreak" class="hud-pill" aria-live="polite" aria-atomic="true">Streak: 0</span>
@@ -175,6 +177,14 @@
       </div>
     </section>
 
+    <!-- SHOP -->
+    <section id="screen-shop" class="screen" role="region" aria-labelledby="shop-title">
+      <h2 id="shop-title">Shop</h2>
+      <p class="tagline">Spend your coins on fun items!</p>
+      <p id="shopCoins">Coins: 0</p>
+      <div id="shopItems" class="shop-items"></div>
+    </section>
+
     <!-- SETTINGS -->
     <section id="screen-settings" class="screen" role="region" aria-labelledby="settings-title">
       <h2 id="settings-title">Settings</h2>
@@ -220,8 +230,8 @@
     <small>© <span id="year"></span> Math Quest — Addition Adventure</small>
   </footer>
 
-  <script src="script.js"></script>
-  <!-- Start: Make PWA (note: this could go in script.js) -->
+  <script src="js/main.js"></script>
+  <!-- Start: Make PWA (note: this could go in main.js) -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -231,7 +241,7 @@
       });
     }
   </script>
-  <!-- End: Make PWA (note: this could go in script.js) -->
+  <!-- End: Make PWA (note: this could go in main.js) -->
 
 </body>
 </html>

@@ -4,14 +4,14 @@ const APP_CACHE = `math-quest-${CACHE_VERSION}`;
 const ASSETS = [
   '/math-quest/',               // root for project site
   '/math-quest/index.html',
-  '/math-quest/style.css',
-  '/math-quest/script.js',
+  '/math-quest/css/style.css',
+  '/math-quest/js/main.js',
   '/math-quest/manifest.webmanifest',
   '/math-quest/offline.html',
-  '/math-quest/icons/icon-192.png',
-  '/math-quest/icons/icon-512.png',
-  '/math-quest/icons/maskable-192.png',
-  '/math-quest/icons/maskable-512.png'
+  '/math-quest/assets/icons/icon-192.png',
+  '/math-quest/assets/icons/icon-512.png',
+  '/math-quest/assets/icons/maskable-192.png',
+  '/math-quest/assets/icons/maskable-512.png'
 ];
 
 // Install: warm the cache
