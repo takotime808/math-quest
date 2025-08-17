@@ -184,5 +184,10 @@ dialog{border:none; border-radius:16px; padding:18px; box-shadow:var(--shadow)}
   .manipulatives{grid-template-columns: 1fr}
   .progress-cards{grid-template-columns:1fr}
   .ten-frame{grid-template-columns: repeat(5, 34px); grid-template-rows: repeat(2, 34px)}
-  .ten-cell{width:34px; height:34px}
+.ten-cell{width:34px; height:34px}
 }
+
+.shop-items{display:flex; flex-wrap:wrap; gap:16px; margin-top:12px}
+.shop-item{background:var(--card); border:2px solid #dbe7ff; border-radius:12px; padding:12px; width:120px; text-align:center; box-shadow:var(--shadow)}
+.shop-item .item-emoji{font-size:32px;}
+.shop-item button{margin-top:8px}

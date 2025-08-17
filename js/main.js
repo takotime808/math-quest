@@ -14,6 +14,9 @@
   const defaultState = {
     playerName: 'Player',
     avatar: 'fox',
+    coins: 0,
+    inventory: [],
+    equipped: null,
     settings: { sound: true, speak: false, highContrast: false, bigButtons: false },
     progress: {
       level: 1,
@@ -73,12 +76,18 @@
     window.speechSynthesis.speak(u);
   }
 
+  const shopItems = [
+    { id: 'hat', name: 'Top Hat', emoji: '🎩', price: 10 },
+    { id: 'glasses', name: 'Shades', emoji: '🕶️', price: 8 }
+  ];
+
   // ---------- DOM references ----------
   const screens = {
     home: $('#screen-home'),
     map: $('#screen-map'),
     game: $('#screen-game'),
     progress: $('#screen-progress'),
+    shop: $('#screen-shop'),
     settings: $('#screen-settings')
   };
   const yearEl = $('#year');
@@ -98,6 +107,10 @@
   // Map
   const levelTiles = $$('.level-tile');
 
+  // Shop
+  const shopItemsEl = $('#shopItems');
+  const shopCoinsEl = $('#shopCoins');
+
   // Game/HUD
   const hudAvatar = $('#hudAvatar');
   const hudPlayer = $('#hudPlayer strong');
@@ -105,6 +118,7 @@
   const hudHearts = $('#hudHearts');
   const hudScore = $('#hudScore');
   const hudStreak = $('#hudStreak');
+  const hudCoins = $('#hudCoins');
 
   const termA = $('#termA');
   const termB = $('#termB');
@@ -149,6 +163,7 @@
     if(el) el.classList.add('is-active');
     if(id === 'screen-map') renderMap();
     if(id === 'screen-progress') renderProgress();
+    if(id === 'screen-shop') renderShop();
     if(id === 'screen-settings') renderSettings();
   }
 
@@ -249,6 +264,38 @@
     }
   }
 
+  function renderShop(){
+    shopCoinsEl.textContent = `Coins: ${state.coins}`;
+    shopItemsEl.innerHTML = '';
+    shopItems.forEach(item => {
+      const owned = state.inventory.includes(item.id);
+      const div = document.createElement('div');
+      div.className = 'shop-item';
+      div.innerHTML = `<div class="item-emoji">${item.emoji}</div><div>${item.name}</div>`;
+      const btn = document.createElement('button');
+      if(owned){
+        btn.textContent = state.equipped === item.id ? 'Equipped' : 'Wear';
+        btn.disabled = state.equipped === item.id;
+      }else{
+        btn.textContent = `Buy (${item.price}🪙)`;
+        btn.disabled = state.coins < item.price;
+      }
+      btn.addEventListener('click', () => {
+        if(!owned && state.coins < item.price) return;
+        if(!owned){
+          state.coins -= item.price;
+          state.inventory.push(item.id);
+        }
+        state.equipped = item.id;
+        saveState();
+        updateHUD();
+        renderShop();
+      });
+      div.appendChild(btn);
+      shopItemsEl.appendChild(div);
+    });
+  }
+
   // ---------- Game Engine ----------
   const levelConfigs = {
     1: { name: 'Sums to 10', targetCorrect: 8, hearts: 3, type: 'sum', rangeA:[0,9], rangeB:[0,9], sumCap: 10, timeLimit: null },
@@ -271,7 +318,6 @@
       timeLeft: cfg.timeLimit,
       accuracyWindow: []
     };
-    hudAvatar.textContent = avatarEmoji(state.avatar);
     hudPlayer.textContent = state.playerName || 'Player';
     hudLevel.textContent = String(lvl);
     updateHUD();
@@ -284,10 +330,19 @@
     return { fox:'🦊', panda:'🐼', robot:'🤖', unicorn:'🦄' }[name] || '🦊';
   }
 
+  function avatarWithItem(){
+    const item = shopItems.find(i => i.id === state.equipped);
+    return avatarEmoji(state.avatar) + (item ? item.emoji : '');
+  }
+
   function updateHUD(){
-    hudHearts.textContent = '❤️'.repeat(Math.max(session.hearts,0));
-    hudScore.textContent = 'Score: ' + session.score;
-    hudStreak.textContent = 'Streak: ' + session.streak;
+    hudAvatar.textContent = avatarWithItem();
+    hudCoins.textContent = `🪙 ${state.coins}`;
+    if(session){
+      hudHearts.textContent = '❤️'.repeat(Math.max(session.hearts,0));
+      hudScore.textContent = 'Score: ' + session.score;
+      hudStreak.textContent = 'Streak: ' + session.streak;
+    }
   }
 
   function startTimer(){
@@ -621,11 +676,19 @@
       state.progress.unlocked = Math.max(state.progress.unlocked, session.level + 1);
       addBadge('🏆 Level ' + session.level + ' Cleared');
     }
+
+    let earned = 0;
+    if(win){
+      earned = session.score;
+      state.coins += earned;
+    }
     saveState();
+    updateHUD();
 
     // Clearer dialog + correct answer for the last problem on loss
     let header = win ? 'Level cleared!' : 'Level over. Try again!';
     let details = `Final score: ${session.score}.`;
+    if(earned) details += `\nCoins earned: ${earned}.`;
 
     if(!win && session?.currentProblem){
       const p = session.currentProblem;
@@ -652,7 +715,6 @@
   }
 
   // ---------- Init HUD ----------
-  hudAvatar.textContent = avatarEmoji(state.avatar);
   hudPlayer.textContent = state.playerName || 'Player';
   hudLevel.textContent = String(state.progress.level);
   updateHUD();

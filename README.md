@@ -11,6 +11,7 @@ A complete, game-style website to teach kids **addition** with levels, badges, t
 - Multiple-choice or typing mode
 - Ten-frame and number line manipulatives
 - Stars, streaks, badges, and a progress dashboard (saved in `localStorage`)
+- Earn coins from levels and spend them on avatar items in the shop
 - Sound effects (no audio files; uses WebAudio beeps)
 - Optional text-to-speech for problems (if the browser supports it)
 - High contrast and Big buttons modes for accessibility
