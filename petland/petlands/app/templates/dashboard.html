@@ -2,6 +2,7 @@
 {% block content %}
 <h2>Hi, {{ user.username }}!</h2>
 <div class="balance">Petcoins: <strong>{{ user.balance }}</strong></div>
+
 <div class="grid">
   <div class="card">
     <h3>Your Pets</h3>
@@ -10,7 +11,7 @@
         {% for p in pets %}
         <li>
           <a href="{{ url_for('main.pet_detail', pid=p.id) }}">
-            <div class="pet-avatar" style="--pet-color: {{ p.color }}"></div>
+            <img class="pet-img" src="{{ pet_img(p, 128) }}" alt="{{ p.name }}">
             <div class="pet-name">{{ p.name }}</div>
             <div class="stats">❤️ {{ p.health }} | 🙂 {{ p.happiness }} | 🍖 {{ p.hunger }}</div>
           </a>
@@ -24,6 +25,7 @@
       <p><a class="btn" href="{{ url_for('main.adopt') }}">Adopt a pet</a></p>
     {% endif %}
   </div>
+
   <div class="card">
     <h3>Daily & Mini-game</h3>
     <form action="{{ url_for('main.daily_spin') }}" method="post">

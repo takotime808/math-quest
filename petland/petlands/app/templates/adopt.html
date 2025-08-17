@@ -1,24 +1,87 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2>Adopt a new pet</h2>
-<form method="post" class="card">
-  <label>Name <input name="name" maxlength="32" required></label>
-  <label>Species
-    <select name="species">
-      <option>Fuzzle</option>
-      <option>Whim</option>
-      <option>Glim</option>
-      <option>Sprig</option>
-    </select>
-  </label>
-  <label>Color
-    <select name="color">
-      <option value="mint">Mint</option>
-      <option value="sky">Sky</option>
-      <option value="peach">Peach</option>
-      <option value="lavender">Lavender</option>
-    </select>
-  </label>
-  <button class="btn" type="submit">Adopt</button>
-</form>
+
+<div class="grid">
+  <form method="post" class="card">
+    <label>Name
+      <input name="name" maxlength="32" required placeholder="Your pet's name">
+    </label>
+
+    <label>Species
+      <select name="species" id="species">
+        <option value="Fuzzle" data-img="Fuzzle">Fuzzle</option>
+        <option value="Whim" data-img="Whim">Whim</option>
+        <option value="Glim" data-img="Glim">Glim</option>
+        <option value="Sprig" data-img="Sprig">Sprig</option>
+      </select>
+    </label>
+
+    <label>Color
+      <select name="color" id="color">
+        <option value="mint">Mint</option>
+        <option value="sky">Sky</option>
+        <option value="peach">Peach</option>
+        <option value="lavender">Lavender</option>
+      </select>
+    </label>
+
+    <button class="btn" type="submit">Adopt</button>
+  </form>
+
+  <div class="card">
+    <h3>Preview</h3>
+    <img id="preview-img" class="pet-img xl" alt="Pet preview" />
+    <div class="stats" id="preview-note">
+      Showing <span id="preview-species">Fuzzle</span> @ 256px
+    </div>
+  </div>
+</div>
+
+<script>
+  // Where the pipeline writes pet art:
+  const PET_ASSETS_BASE = "{{ url_for('static', filename='assets/pets/') }}";
+  const previewImg = document.getElementById('preview-img');
+  const previewSpecies = document.getElementById('preview-species');
+  const speciesSelect = document.getElementById('species');
+
+  // Try a list of sizes so preview still works if only one exists
+  const candidateSizes = [256, 128, 64];
+
+  function updatePreview() {
+    const species = speciesSelect.value;
+    previewSpecies.textContent = species;
+
+    // Construct a list of possible URLs (largest first)
+    const urls = candidateSizes.map(sz => `${PET_ASSETS_BASE}${species}/${sz}.png`);
+
+    // Try each URL until one loads
+    let idx = 0;
+    function tryNext() {
+      if (idx >= urls.length) {
+        // Fallback: neutral placeholder if nothing exists (simple data URL)
+        previewImg.src =
+          'data:image/svg+xml;utf8,' +
+          encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256">
+            <rect width="100%" height="100%" rx="28" ry="28" fill="#ffffff"/>
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+              font-family="sans-serif" font-size="16" fill="#6a7180">
+              No image found for ${species}
+            </text>
+          </svg>`);
+        return;
+      }
+      const url = urls[idx++];
+      const probe = new Image();
+      probe.onload = () => { previewImg.src = url; };
+      probe.onerror = tryNext;
+      probe.src = url;
+    }
+    tryNext();
+  }
+
+  speciesSelect.addEventListener('change', updatePreview);
+  // Initial render
+  updatePreview();
+</script>
 {% endblock %}

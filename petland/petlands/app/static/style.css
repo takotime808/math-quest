@@ -14,3 +14,29 @@ h2{margin-top:0}.balance{margin-bottom:12px}
 .pet-avatar.xl{width:140px;height:140px;border-radius:30px;margin-bottom:8px}.stats{font-size:14px;color:var(--muted)}.stats.xl{font-size:16px}
 .table{width:100%;border-collapse:collapse}.table th,.table td{padding:8px;border-bottom:1px solid #eef0f6;text-align:left}.footer{opacity:.7;margin-top:24px}
 .question{font-size:24px;margin-bottom:8px}
+
+/* Pet image tiles */
+.pet-img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  border: 3px solid rgba(0,0,0,.05);
+}
+.pet-img.xl {
+  width: 220px;
+  height: 220px;
+  border-radius: 28px;
+}
+
+/* Put the preview card image on a subtle checkerboard so transparency is visible */
+.card .pet-img.xl {
+  background:
+    linear-gradient(45deg, #f1f1f1 25%, transparent 25%) -10px 0/20px 20px,
+    linear-gradient(-45deg, #f1f1f1 25%, transparent 25%) -10px 0/20px 20px,
+    linear-gradient(45deg, transparent 75%, #f1f1f1 75%) -10px 0/20px 20px,
+    linear-gradient(-45deg, transparent 75%, #f1f1f1 75%) -10px 0/20px 20px,
+    #fff;
+}

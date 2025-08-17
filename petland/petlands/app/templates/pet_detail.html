@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2>{{ pet.name }} the {{ pet.species }}</h2>
+
 <div class="card">
-  <div class="pet-avatar xl" style="--pet-color: {{ pet.color }}"></div>
+  <img class="pet-img xl" src="{{ pet_img(pet, 256) }}" alt="{{ pet.name }}">
   <div class="stats xl">❤️ {{ pet.health }} | 🙂 {{ pet.happiness }} | 🍖 {{ pet.hunger }}</div>
   <form method="post">
     <button name="action" value="play" class="btn">Play (+10🙂 -5🍖)</button>
   </form>
 </div>
+
 <div class="card">
   <h3>Feed / Use Item</h3>
   {% set inv = user.inventory_items %}
@@ -24,5 +26,6 @@
     <p>No items. Visit the <a href="{{ url_for('main.shop') }}">Shop</a>.</p>
   {% endif %}
 </div>
+
 <p><a href="{{ url_for('main.dashboard') }}">← Back to dashboard</a></p>
 {% endblock %}
